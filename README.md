@@ -1,1 +1,1 @@
-# JSchat
+# jsChat
