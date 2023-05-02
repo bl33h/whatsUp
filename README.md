@@ -1,1 +1,1 @@
-# jsChat
+# fantasticChat
