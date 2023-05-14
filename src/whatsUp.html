@@ -1,0 +1,239 @@
+<!-- Copyright (C), 2023-2024, Sara Echeverria (bl33h)
+     @author Sara Echeverria
+     FileName: whatsUp
+     @version: I
+     Creation: 30/04/2023
+     Last modification: 14/05/2023-->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>What's up</title>
+        <!-- Title and icon  -->
+        <link rel="icon" href="img/iconA.png">
+        <style>
+        /* username effects */
+          @keyframes fadeIn {
+            from {
+              opacity: 0;
+            }
+            to {
+              opacity: 1;
+            }
+          }
+
+          @keyframes blink {
+            0% {
+              background-color: #72BBAC;
+              color: black;
+            }
+            50% {
+              background-color: transparent;
+              color: inherit;
+            }
+            100% {
+              background-color: #72BBAC;
+              color: black;
+            }
+          }
+
+          .fade-in {
+            animation: fadeIn 1s ease-in;
+          }
+
+          .blink {
+            animation: blink 2s infinite;
+          }
+
+          .highlight-on-hover:hover {
+            animation: none;
+            background-color: #72BBAC;
+            color: black;
+            padding: 2px;
+            border-radius: 3px;
+          }
+        </style>
+    </head>
+    <body>
+      <figure style="display: flex; justify-content: center; align-items: center; margin-bottom: 1px;">
+        <img src="/img/whatsUp.gif" height="200" style="display: block;">
+      </figure>
+    <script type="application/javascript">
+      
+      const structure = document.querySelector('body'); // background
+      structure.style.backgroundColor = '#525B4A';
+      structure.style.padding = '50px';      
+
+      const chatContainer = document.createElement('div');
+      chatContainer.style.width = '900px';
+      chatContainer.style.height = '400px';
+      chatContainer.style.marginLeft = 'auto';
+      chatContainer.style.marginRight = 'auto';
+      chatContainer.style.position = 'relative';
+
+      const chatContent = document.createElement('div'); // messages
+      chatContent.style.position = 'absolute';
+      chatContent.style.top = '50%';
+      chatContent.style.left = '50%';
+      chatContent.style.transform = 'translate(-50%, -50%)';
+
+      chatContainer.appendChild(chatContent);
+
+      const form = document.createElement('form'); // buttons and inputs place
+      form.style.display = 'flex';
+      form.style.justifyContent = 'center';
+      form.style.alignItems = 'center';
+      form.style.marginBottom = '20px';
+
+      const nameInput = document.createElement('input');
+      nameInput.type = 'text';
+      nameInput.style.border = 'none';
+      nameInput.style.fontFamily = 'Arial';
+      nameInput.placeholder = 'Name';
+      nameInput.style.border = '5px solid #72BBAC';
+      nameInput.style.borderRadius = '7px';
+      nameInput.style.width = '150px';
+      nameInput.style.padding = '10px';
+      nameInput.style.marginRight = '10px';
+
+      const messageInput = document.createElement('input');
+      messageInput.type = 'text';
+      messageInput.style.border = 'none';
+      messageInput.style.borderRadius = '7px';
+      messageInput.placeholder = 'Type your message...';
+      messageInput.style.border = '5px solid #72BBAC';
+      messageInput.style.width = '300px';
+      messageInput.style.padding = '10px';
+      messageInput.style.marginRight = '10px';
+
+      const button = document.createElement('button');
+      button.innerText = 'Post';
+
+      button.style.border = 'none';
+      button.style.borderRadius = '5px';
+      button.style.padding = '10px 20px';
+      button.style.backgroundColor = '#fff';
+      button.style.color = '#74BBAC';
+      button.style.border = '5px solid #72BBAC';
+      button.style.cursor = 'pointer';
+      button.style.fontWeight = 'bold';
+
+      const ul = document.createElement('ul');
+      ul.style.listStyle = 'none';
+      ul.style.wordBreak = 'break-word';
+      
+      form.append(nameInput);
+      form.append(messageInput);
+      form.append(button);
+      
+      const Message = (text, user) => {
+        const shownMessages = document.createElement('shownMessages');
+        shownMessages.style.marginBottom = '20px';
+        shownMessages.style.backgroundColor = '#ffff';
+        shownMessages.style.borderRadius = '5px';
+        shownMessages.style.display = 'flex';
+        shownMessages.style.flexDirection = 'column';
+
+        const userSpan = document.createElement('span');
+        userSpan.classList.add('highlight-on-hover', 'blink');
+
+        if (user.trim() === '') {
+          user = 'Anonymous';
+        }
+        const userName = document.createElement('strong');
+        userName.innerText = user;
+        userSpan.append(userName);
+        shownMessages.append(userSpan);
+
+        const messageText = document.createElement('span');
+        const imageRegex = /(https?:\/\/.*\.(?:jpg|jpeg|png|gif))/i; // url search in every message
+        const imageUrl = text.match(imageRegex); 
+        
+        if (imageUrl) { 
+          const imagePreview = document.createElement('img'); // image preview
+          imagePreview.src = imageUrl[0]; 
+          imagePreview.style.maxWidth = '100px';
+          messageText.append(imagePreview);
+
+        } else if (text.includes("http://") || text.includes("https://") || text.includes("www.")) {
+
+            const iframe = document.createElement('iframe')
+              iframe.setAttribute('src', text)
+              iframe.setAttribute('width', '500px')
+              iframe.setAttribute('height', '200px')
+              shownMessages.append(iframe)
+
+              const button = document.createElement('button')
+              button.innerText = 'Open in new window'
+              button.style.width = '500px'
+              button.style.backgroundColor = '#525B4A'
+              button.style.color = '#fff'
+              button.style.borderRadius = '5px'
+              button.addEventListener('click', () => {
+                window.open(text)
+              })
+              shownMessages.append(button)
+        }
+        else {
+          messageText.append(text);
+        }
+        shownMessages.append(messageText);
+        return shownMessages;
+      }
+
+      const getMessages = async () => {
+        const response = await fetch('https://uvgenios.online/api/messages');
+        const messages = await response.json();
+        const lis = messages.map((message) => Message(message.text, message.user));
+        lis.forEach((li) => ul.append(li));
+        window.scrollTo(0,document.querySelector('body').scrollHeight); // dynamic scroll
+      };
+
+      const postMessage = async (user, text) => {
+        const data = {
+          text,
+          user
+        };
+        const response = await fetch('https://uvgenios.online/api/messages', {
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        return response;
+      }
+
+      getMessages(); // messages update
+      button.addEventListener('click', async (event) => { 
+        event.preventDefault();  
+
+        await postMessage(nameInput.value,messageInput.value); 
+        ul.innerHTML = ""; 
+        getMessages(); 
+        messageInput.value = "";
+        nameInput.value = "";
+      });
+
+      messageInput.addEventListener('input', () => {
+        const value = messageInput.value;
+        const maxLength = 140;
+        if (value.length > maxLength) {
+          alert("Only 140 characters are allowed, rewrite your message.") // warning when the 140 characters is reached
+          messageInput.value = value.substring(0, maxLength);
+        }
+      });
+
+      messageInput.addEventListener('keydown', (event) => {
+        if (event.keyCode === 13) { // when you touch the enter key, it posts a message
+          event.preventDefault(); 
+          button.click();
+        }
+      });
+
+      chatContainer.append(ul);
+      chatContainer.append(form);
+      structure.append(chatContainer);
+    </script>
+</body>
+</html>
