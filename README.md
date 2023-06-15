@@ -1,5 +1,5 @@
 # whatsUp
-This project is a chat interface that connects to the UVGenios API (https://uvgenios.online/api/messages), allowing users to send and receive messages in real-time. The chat interface is built using JavaScript and HTML, providing a seamless and interactive experience for users.
+This project is a chat interface that connects to the [UVGenios API](https://uvgenios.online/api/messages), allowing users to send and receive messages in real-time. The chat interface is built using JavaScript and HTML, providing a seamless and interactive experience for users.
 
 <p align="center">
   <br>
