@@ -8,7 +8,7 @@ This project is a chat interface that connects to the [UVGenios API](https://uvg
 </p>
 <p align="center" >
   <a href="#Files">Files</a> •
-  <a href="#how-to-use">How To Use</a> •
+  <a href="#how-to-use">How To Use</a> 
 </p>
 <p align="center" >
 <a href="https://whatsupbl33h.netlify.app/">Try it out here</a> 
