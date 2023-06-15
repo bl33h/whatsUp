@@ -21,7 +21,7 @@ This project is a chat interface that connects to the [UVGenios API](https://uvg
 
 ## How To Use
 
-To clone and run this application, you'll need [Git] (https://git-scm.com) installed on your computer. From your command line:
+To clone and run this application, you'll need [Git](https://git-scm.com) installed on your computer. From your command line:
 
 ```bash
 # Clone this repository
